@@ -7,7 +7,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
      # - aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 800667604467.dkr.ecr.us-east-1.amazonaws.com
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 941866212823.dkr.ecr.us-east-1.amazonaws.com
       - REPOSITORY_URI=800667604467.dkr.ecr.us-east-1.amazonaws.com/node
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       #- IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
@@ -17,13 +17,13 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker login -u sri5606 -p $password
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t node .
+      - docker tag node:latest 941866212823.dkr.ecr.us-east-1.amazonaws.com/node:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push 941866212823.dkr.ecr.us-east-1.amazonaws.com/node:latest
       - echo Writing image definitions file...
       - printf '[{"name":"node-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - cat imagedefinitions.json 
